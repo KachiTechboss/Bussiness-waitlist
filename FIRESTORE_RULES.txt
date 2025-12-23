@@ -1,0 +1,72 @@
+// FIRESTORE SECURITY RULES
+// Copy this entire content to: Firebase Console → Firestore → Rules tab
+// Then click "Publish"
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow users to manage their own documents
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+    
+    // Waitlists collection
+    match /waitlists/{waitlistId} {
+      // Only the business owner can write/update their waitlist
+      allow read, write: if request.auth.uid == resource.data.businessId;
+      
+      // Allow anyone to read waitlist details (for public queue page)
+      allow read: if true;
+      
+      // Customers subcollection
+      match /customers/{customerId} {
+        // Authenticated users can read/write customers
+        // (business owner checks done via app logic)
+        allow read, write: if request.auth != null;
+      }
+    }
+  }
+}
+
+// EXPLANATION:
+
+// 1. Users Collection
+//    - Each user has a document with their email and role
+//    - Only they can read/write their own document
+//    - Field: role = "business" or "customer"
+
+// 2. Waitlists Collection
+//    - Businesses create waitlist documents
+//    - businessId field matches auth UID
+//    - Only business owner can write
+//    - Public read allows customers to see queue info
+//    - Example: /waitlists/{waitlistId}
+
+// 3. Customers Subcollection
+//    - Stored under each waitlist
+//    - Contains individual customer records
+//    - Fields: name, phone, position, addedAt, served
+//    - Any authenticated user can read/write
+//    - (App logic prevents cross-access)
+//    - Path: /waitlists/{waitlistId}/customers/{customerId}
+
+// IMPORTANT NOTES:
+
+// • Test Mode allows all reads/writes (development only)
+// • These rules are for production (more restrictive)
+// • businessId stored in waitlist document
+// • Role checked in React (app logic layer)
+// • Customers don't need auth to join queue (public access)
+
+// IF RULES DON'T WORK:
+// 1. Verify you copied the entire rule
+// 2. Check syntax (no typos)
+// 3. Click "Publish" button
+// 4. Wait 1-2 minutes for deployment
+// 5. Check browser console for Firestore errors
+
+// TO DEBUG:
+// 1. Firebase Console → Firestore → Rules tab
+// 2. Click "Create rule" → "Emulator" tab
+// 3. Test your reads/writes
+// 4. See error messages clearly

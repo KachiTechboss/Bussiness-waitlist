@@ -1,0 +1,223 @@
+.navbar {
+  background: linear-gradient(135deg, #000080 0%, #9E2A3A 100%);
+  padding: 16px 0;
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.15), 0 0 20px rgba(255, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.dark .navbar {
+  background: linear-gradient(135deg, #16213e 0%, #5c1a1a 100%);
+}
+
+.navContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.navLink {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.navLink:hover {
+  opacity: 0.8;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.userInfo {
+  color: white;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  white-space: nowrap;
+}
+
+.logoutBtn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.logoutBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+}
+
+.themeToggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid white;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.themeToggle:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Mobile Menu Button */
+.menuButton {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.2s;
+}
+
+.menuButton:hover {
+  transform: scale(1.15);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navContent {
+    padding: 0 16px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .navLinks {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: linear-gradient(135deg, #000080 0%, #9E2A3A 100%);
+    padding: 16px 0;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.3s ease-out;
+  }
+
+  .dark .navLinks {
+    background: linear-gradient(135deg, #16213e 0%, #5c1a1a 100%);
+  }
+
+  .navLinks.active {
+    display: flex;
+  }
+
+  .navLink {
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: block;
+    width: 100%;
+  }
+
+  .navLink:last-child {
+    border-bottom: none;
+  }
+
+  .userInfo {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 0 20px;
+    font-size: 13px;
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .logoutBtn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .themeToggle {
+    padding: 10px;
+    font-size: 18px;
+    align-self: flex-start;
+  }
+
+  .menuButton {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .navContent {
+    padding: 0 12px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .navLinks {
+    top: 55px;
+  }
+
+  .userInfo {
+    padding: 0 16px;
+    font-size: 12px;
+  }
+
+  .logoutBtn {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .themeToggle {
+    padding: 6px;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
