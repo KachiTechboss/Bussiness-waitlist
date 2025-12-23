@@ -197,7 +197,7 @@ const Dashboard = () => {
 
   const getQueueLink = () => {
     return selectedWaitlist
-      ? `${window.location.origin}/queue/${selectedWaitlist}`
+      ? `${window.location.origin}${window.location.pathname}#/queue/${selectedWaitlist}`
       : '';
   };
 

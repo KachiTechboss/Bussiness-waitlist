@@ -8,6 +8,8 @@ import {
   query,
   onSnapshot,
   setDoc,
+  addDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useTheme } from "../context/ThemeContext";
@@ -29,6 +31,7 @@ const CustomerView = () => {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
 
   // 🔐 Wait for auth
   useEffect(() => {
@@ -48,7 +51,12 @@ const CustomerView = () => {
         const snap = await getDoc(ref);
 
         if (snap.exists()) {
-          setWaitlist({ id: snap.id, ...snap.data() });
+          const data = { id: snap.id, ...snap.data() };
+          setWaitlist(data);
+
+          if (user?.uid && user.uid === data.ownerId) {
+            setIsOwner(true);
+          }
         } else {
           setError("Waitlist not found");
         }
@@ -60,15 +68,13 @@ const CustomerView = () => {
     };
 
     fetchWaitlist();
-  }, [waitlistId]);
+  }, [waitlistId, user]);
 
   // 🔄 Subscribe to queue
   useEffect(() => {
     if (!waitlistId) return;
 
-    const q = query(
-      collection(db, "waitlists", waitlistId, "customers")
-    );
+    const q = query(collection(db, "waitlists", waitlistId, "customers"));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((d) => ({
@@ -91,7 +97,7 @@ const CustomerView = () => {
     return unsubscribe;
   }, [waitlistId, user]);
 
-  // ➕ Join queue (FIXED)
+  // ➕ Join queue
   const handleJoinQueue = async (e) => {
     e.preventDefault();
     setError("");
@@ -101,11 +107,7 @@ const CustomerView = () => {
     try {
       if (!user) {
         setError("You must be logged in to join the queue");
-        return;
-      }
-
-      if (!waitlistId) {
-        setError("Invalid waitlist");
+        setLoading(false);
         return;
       }
 
@@ -129,6 +131,22 @@ const CustomerView = () => {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // 🗑️ Remove customer (Owner Only)
+  const handleRemoveCustomer = async (customerId) => {
+    if (!isOwner) {
+      alert("Only the business owner can remove customers");
+      return;
+    }
+
+    try {
+      await deleteDoc(
+        doc(db, "waitlists", waitlistId, "customers", customerId)
+      );
+    } catch (err) {
+      console.error("Error removing customer:", err.message);
     }
   };
 
@@ -195,6 +213,25 @@ const CustomerView = () => {
               {loading ? "Joining…" : "Join Queue"}
             </button>
           </motion.form>
+        )}
+
+        {isOwner && queue.length > 0 && (
+          <div className={styles.queueList}>
+            <h2>Current Queue</h2>
+            {queue.map((c) => (
+              <div key={c.id} className={styles.queueItem}>
+                <span>
+                  {c.position}. {c.name} ({c.phone})
+                </span>
+                <button
+                  onClick={() => handleRemoveCustomer(c.id)}
+                  className={styles.removeBtn}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
