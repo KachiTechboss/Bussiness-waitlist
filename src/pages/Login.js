@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import styles from '../styles/Auth.module.css';
@@ -44,7 +45,12 @@ const Login = () => {
 
   return (
     <div className={`${styles.authContainer} ${isDark ? 'dark' : ''}`}>
-      <div className={styles.authCard}>
+      <motion.div
+        className={styles.authCard}
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <h1 className={styles.title}>Welcome Back</h1>
         <p className={styles.subtitle}>Sign in to your account</p>
 
@@ -75,39 +81,45 @@ const Login = () => {
             />
           </div>
 
-          <button
+          <motion.button
             type="submit"
             className={styles.button}
             disabled={loading}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             {loading ? 'Signing in...' : 'Sign In'}
-          </button>
+          </motion.button>
         </form>
 
         <div className={styles.divider}>or</div>
 
         <div>
-          <button
+          <motion.button
             onClick={() => handleGoogleLogin('customer')}
             className={styles.googleButton}
             disabled={loading}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             🔐 Google - Join as Customer
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             onClick={() => handleGoogleLogin('business')}
             className={styles.googleButton}
             disabled={loading}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             🏢 Google - Join as Business
-          </button>
+          </motion.button>
         </div>
 
         <div className={styles.toggle}>
           Don't have an account?{' '}
           <Link to="/signup">Sign up</Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

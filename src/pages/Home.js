@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import styles from '../styles/Home.module.css';
@@ -57,40 +58,75 @@ const Home = () => {
   return (
     <div className={`${styles.home} ${isDark ? 'dark' : ''}`}>
       <div className={styles.container}>
-        <div className={styles.hero}>
+        {/* Hero Section */}
+        <motion.div
+          className={styles.hero}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <h1 className={styles.title}>⏱️ QueueLess Lite</h1>
           <p className={styles.subtitle}>
             Real-time waitlist management for small businesses
           </p>
           <div className={styles.ctaButtons}>
-            <button className={styles.primary} onClick={handleGetStarted}>
+            <motion.button
+              className={styles.primary}
+              onClick={handleGetStarted}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               {user ? 'Go to Dashboard' : 'Get Started'}
-            </button>
-            <a href="#features" className={styles.secondary}>
+            </motion.button>
+            <motion.a
+              href="#features"
+              className={styles.secondary}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               Learn More
-            </a>
+            </motion.a>
           </div>
-        </div>
+        </motion.div>
 
+        {/* Features Grid */}
         <div className={styles.features} id="features">
           {features.map((feature, idx) => (
-            <div key={idx} className={styles.featureCard}>
+            <motion.div
+              key={idx}
+              className={styles.featureCard}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              whileHover={{ y: -5, boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}
+            >
               <div className={styles.featureIcon}>{feature.icon}</div>
               <h3 className={styles.featureTitle}>{feature.title}</h3>
               <p className={styles.featureDescription}>{feature.description}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        <div className={styles.cta}>
+        {/* CTA Section */}
+        <motion.div
+          className={styles.cta}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
           <h2 className={styles.ctaTitle}>Ready to eliminate lines?</h2>
           <p className={styles.ctaDescription}>
             Join thousands of businesses managing queues smarter.
           </p>
-          <button className={styles.ctaButton} onClick={handleGetStarted}>
+          <motion.button
+            className={styles.ctaButton}
+            onClick={handleGetStarted}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             {user ? 'Open Dashboard' : 'Create Free Account'}
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     </div>
   );

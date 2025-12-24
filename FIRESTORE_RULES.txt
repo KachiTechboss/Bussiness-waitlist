@@ -12,17 +12,24 @@ service cloud.firestore {
     
     // Waitlists collection
     match /waitlists/{waitlistId} {
-      // Only the business owner can write/update their waitlist
-      allow read, write: if request.auth.uid == resource.data.businessId;
-      
       // Allow anyone to read waitlist details (for public queue page)
       allow read: if true;
       
+      // Only the business owner can write/update/delete their waitlist
+      allow write: if request.auth.uid == resource.data.businessId;
+      allow create: if request.auth != null;
+      allow delete: if request.auth.uid == resource.data.businessId;
+      
       // Customers subcollection
       match /customers/{customerId} {
-        // Authenticated users can read/write customers
-        // (business owner checks done via app logic)
-        allow read, write: if request.auth != null;
+        // Anyone can read customers (public queue visibility)
+        allow read: if true;
+        
+        // Only authenticated users can add/remove customers
+        allow create, delete: if request.auth != null;
+        
+        // Anyone can update customer data (position, served status)
+        allow update: if true;
       }
     }
   }

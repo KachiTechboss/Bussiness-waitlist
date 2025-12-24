@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import styles from '../styles/Auth.module.css';
@@ -31,7 +32,12 @@ const Signup = () => {
 
   return (
     <div className={`${styles.authContainer} ${isDark ? 'dark' : ''}`}>
-      <div className={styles.authCard}>
+      <motion.div
+        className={styles.authCard}
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <h1 className={styles.title}>Create Account</h1>
         <p className={styles.subtitle}>Join QueueLess today</p>
 
@@ -40,22 +46,26 @@ const Signup = () => {
         <form onSubmit={handleSubmit}>
           <label className={styles.label}>I am a:</label>
           <div className={styles.roleSelector}>
-            <div
+            <motion.div
               className={`${styles.roleOption} ${role === 'customer' ? styles.active : ''}`}
               onClick={() => setRole('customer')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               <div className={styles.roleLabel}>👤</div>
               <div className={styles.roleLabel}>Customer</div>
               <div className={styles.roleDescription}>Join a queue</div>
-            </div>
-            <div
+            </motion.div>
+            <motion.div
               className={`${styles.roleOption} ${role === 'business' ? styles.active : ''}`}
               onClick={() => setRole('business')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               <div className={styles.roleLabel}>🏢</div>
               <div className={styles.roleLabel}>Business</div>
               <div className={styles.roleDescription}>Manage queues</div>
-            </div>
+            </motion.div>
           </div>
 
           <div className={styles.formGroup}>
@@ -83,20 +93,22 @@ const Signup = () => {
             />
           </div>
 
-          <button
+          <motion.button
             type="submit"
             className={styles.button}
             disabled={loading}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             {loading ? 'Creating account...' : 'Create Account'}
-          </button>
+          </motion.button>
         </form>
 
         <div className={styles.toggle}>
           Already have an account?{' '}
           <Link to="/login">Sign in</Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
