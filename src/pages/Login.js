@@ -24,6 +24,7 @@ const Login = () => {
       navigate('/');
     } catch (err) {
       setError(err.message);
+      console.log(error);
     } finally {
       setLoading(false);
     }

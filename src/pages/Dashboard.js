@@ -16,6 +16,7 @@ import {
 } from 'firebase/firestore';
 import QRCode from 'qrcode.react';
 import { motion } from 'framer-motion';
+import { migrateWaitlists } from '../utils/migrateWaitlists';
 import styles from '../styles/Dashboard.module.css';
 
 const Dashboard = () => {
@@ -31,6 +32,21 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isMigrating, setIsMigrating] = useState(false);
+
+  // 🔧 Handle migration
+  const handleMigration = async () => {
+    setIsMigrating(true);
+    try {
+      const count = await migrateWaitlists();
+      setSuccess(`✓ Migration complete: ${count} waitlists updated`);
+      setError('');
+    } catch (err) {
+      setError(`Migration failed: ${err.message}`);
+    } finally {
+      setIsMigrating(false);
+    }
+  };
 
   // Fetch waitlists on mount
   useEffect(() => {
@@ -38,7 +54,7 @@ const Dashboard = () => {
 
     const q = query(
       collection(db, 'waitlists'),
-      where('businessId', '==', user.uid)
+      where('ownerId', '==', user.uid)
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -83,7 +99,7 @@ const Dashboard = () => {
 
     try {
       const docRef = await addDoc(collection(db, 'waitlists'), {
-        businessId: user.uid,
+        ownerId: user.uid,
         name: newWaitlistName,
         serviceTime: parseInt(serviceTime),
         createdAt: new Date(),
@@ -214,6 +230,33 @@ const Dashboard = () => {
 
         {error && <div className={styles.error}>{error}</div>}
         {success && <div className={styles.success}>{success}</div>}
+
+        {/* Migration Button (for legacy data) */}
+        <motion.div
+          className={styles.card}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#f0f0f0' }}
+        >
+          <p style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#666' }}>
+            ⚠️ If you have old waitlists that aren't showing, click below to migrate them:
+          </p>
+          <button
+            onClick={handleMigration}
+            disabled={isMigrating}
+            style={{
+              padding: '10px 15px',
+              backgroundColor: '#4CAF50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: isMigrating ? 'not-allowed' : 'pointer',
+              opacity: isMigrating ? 0.6 : 1,
+            }}
+          >
+            {isMigrating ? 'Migrating...' : '🔧 Migrate Old Waitlists'}
+          </button>
+        </motion.div>
 
         {/* Stats Cards */}
         <div className={styles.grid}>

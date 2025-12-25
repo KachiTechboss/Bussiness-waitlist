@@ -1,0 +1,252 @@
+.scanner {
+  min-height: calc(100vh - 60px);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.scanner.dark {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.container {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.scanner.dark .container {
+  background: #2d2d44;
+  color: white;
+}
+
+h2 {
+  margin: 0 0 10px 0;
+  font-size: 28px;
+  color: #333;
+  text-align: center;
+}
+
+.scanner.dark h2 {
+  color: white;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.scanner.dark .subtitle {
+  color: #aaa;
+}
+
+.error {
+  background-color: #fee;
+  border: 1px solid #fcc;
+  color: #c33;
+  padding: 12px 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.success {
+  background-color: #efe;
+  border: 1px solid #cfc;
+  color: #3c3;
+  padding: 12px 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.cameraContainer {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.video {
+  width: 100%;
+  border-radius: 8px;
+  background: #000;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.stopBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.stopBtn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.hint {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.primaryBtn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 30px;
+}
+
+.primaryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.primaryBtn:active {
+  transform: translateY(0);
+}
+
+.divider {
+  text-align: center;
+  margin: 30px 0;
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 600;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: #ddd;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.scanner.dark .divider {
+  color: #666;
+}
+
+.scanner.dark .divider::before,
+.scanner.dark .divider::after {
+  background: #444;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input {
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.scanner.dark .input {
+  background: #3d3d54;
+  border-color: #444;
+  color: white;
+}
+
+.scanner.dark .input::placeholder {
+  color: #888;
+}
+
+.scanner.dark .input:focus {
+  border-color: #667eea;
+}
+
+.submitBtn {
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.submitBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.submitBtn:active {
+  transform: translateY(0);
+}
+
+.help {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.scanner.dark .help {
+  color: #aaa;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 30px 20px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  .primaryBtn,
+  .submitBtn {
+    padding: 12px;
+    font-size: 15px;
+  }
+}

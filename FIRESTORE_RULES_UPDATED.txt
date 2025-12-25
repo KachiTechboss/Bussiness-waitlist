@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* ─────────────────────────────
+       USERS (AUTH PROFILES)
+       ───────────────────────────── */
+    match /users/{userId} {
+      allow read, write: if request.auth != null
+                         && request.auth.uid == userId;
+    }
+
+    /* ─────────────────────────────
+       WAITLISTS
+       ───────────────────────────── */
+    match /waitlists/{waitlistId} {
+
+      // Public can read waitlist info
+      allow read: if true;
+
+      // Any logged-in user can create
+      allow create: if request.auth != null;
+
+      // Owner can update/delete (handles both new ownerId and old businessId fields)
+      allow update, delete: if request.auth != null
+        && (request.auth.uid == resource.data.ownerId || 
+            request.auth.uid == resource.data.businessId);
+
+      /* ─────────────────────────────
+         CUSTOMERS (QUEUE)
+         ───────────────────────────── */
+      match /customers/{customerId} {
+
+        // Anyone can see the queue
+        allow read: if true;
+
+        // Logged-in users can join queue
+        allow create: if request.auth != null;
+
+        // ONLY OWNER CAN REMOVE / SERVE NEXT
+        allow delete: if request.auth != null
+          && (request.auth.uid ==
+             get(/databases/$(database)/documents/waitlists/$(waitlistId))
+               .data.ownerId ||
+              request.auth.uid ==
+             get(/databases/$(database)/documents/waitlists/$(waitlistId))
+               .data.businessId);
+
+        // Prevent position tampering
+        allow update: if request.auth != null
+          && (request.auth.uid ==
+             get(/databases/$(database)/documents/waitlists/$(waitlistId))
+               .data.ownerId ||
+              request.auth.uid ==
+             get(/databases/$(database)/documents/waitlists/$(waitlistId))
+               .data.businessId);
+      }
+    }
+  }
+}

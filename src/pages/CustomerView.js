@@ -29,7 +29,7 @@ const CustomerView = () => {
   const [hasJoined, setHasJoined] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
 
@@ -58,10 +58,12 @@ const CustomerView = () => {
             setIsOwner(true);
           }
         } else {
+          console.error("Waitlist document does not exist. ID:", waitlistId);
           setError("Waitlist not found");
         }
       } catch (err) {
-        setError(err.message);
+        console.error("Error fetching waitlist:", err);
+        setError(`Error: ${err.message}`);
       } finally {
         setLoading(false);
       }
@@ -111,6 +113,12 @@ const CustomerView = () => {
         return;
       }
 
+      if (!waitlistId) {
+        setError("Waitlist not found");
+        setLoading(false);
+        return;
+      }
+
       const position = queue.length + 1;
 
       await setDoc(
@@ -127,7 +135,7 @@ const CustomerView = () => {
       setHasJoined(true);
       setSuccess("Successfully joined the queue!");
     } catch (err) {
-      console.error(err);
+      console.log(err);
       setError(err.message);
     } finally {
       setLoading(false);

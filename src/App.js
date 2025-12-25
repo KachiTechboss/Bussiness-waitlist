@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { useTheme } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
+import QRScanner from './components/QRScanner';
 
 // Pages
 import Home from './pages/Home';
@@ -51,7 +52,7 @@ function AppContent() {
           path="/customer"
           element={
             <ProtectedRoute allowedRole="customer">
-              <CustomerView waitlistId={null} />
+              <QRScanner />
             </ProtectedRoute>
           }
         />
